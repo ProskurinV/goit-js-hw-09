@@ -1,6 +1,6 @@
 import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
-// import Notiflix from 'notiflix';
+import Notiflix from 'notiflix';
 
 input = document.querySelector('#datetime-picker');
 startBtn = document.querySelector('button[data-start]');
@@ -12,7 +12,7 @@ const options = {
   defaultDate: new Date(),
   minuteIncrement: 1,
   onClose(selectedDates) {
-    console.log(selectedDates[0]);
+    // console.log(selectedDates[0]);
 
     if (selectedDates[0] < new Date()) {
       startBtn.disabled = true;
