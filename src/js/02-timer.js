@@ -36,22 +36,23 @@ const options = {
     if (selectedDates[0] <= new Date()) {
       startBtn.disabled = true;
       Notiflix.Notify.failure('Please choose a date in the future');
-    } else {
-      startBtn.disabled = false;
     }
   },
 };
 
 function onStartTimer() {
-  setInterval(() => {
+  let timerId = setInterval(() => {
     let diff = new Date(input.value) - new Date();
     startBtn.disabled = true;
-    if (diff > 0) {
+    if (diff >= 0) {
       let time = convertMs(diff);
       days.textContent = addLeadingZero(time.days);
       hours.textContent = addLeadingZero(time.hours);
       minutes.textContent = addLeadingZero(time.minutes);
       seconds.textContent = addLeadingZero(time.seconds);
+    } else if (diff <= 1) {
+      Notiflix.Notify.success('Time is over');
+      clearInterval(timerId);
     }
   }, 1000);
 }
