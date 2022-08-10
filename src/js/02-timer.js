@@ -2,34 +2,13 @@ import flatpickr from 'flatpickr';
 import 'flatpickr/dist/flatpickr.min.css';
 import Notiflix from 'notiflix';
 
-input = document.querySelector('#datetime-picker');
-startBtn = document.querySelector('button[data-start]');
-timer = document.querySelector('.timer');
+const input = document.querySelector('#datetime-picker');
+const startBtn = document.querySelector('[data-start]');
 
-const options = {
-  enableTime: true,
-  time_24hr: true,
-  defaultDate: new Date(),
-  minuteIncrement: 1,
-  onClose(selectedDates) {
-    // console.log(selectedDates[0]);
-
-    if (selectedDates[0] < new Date()) {
-      startBtn.disabled = true;
-      Notiflix.Notify.failure('Please choose a date in the future');
-    } else startBtn.disabled = false;
-  },
-  //   disable: [
-  //     function (date) {
-  //       // return true to disable
-  //       return date.getDay() === 0 || date.getDay() === 6;
-  //     },
-  //   ],
-  //   locale: {
-  //     firstDayOfWeek: 1, // start week on Monday
-  //   },
-};
-flatpickr(input, options);
+const days = document.querySelector('[data-days]');
+const hours = document.querySelector('[data-hours]');
+const minutes = document.querySelector('[data-minutes]');
+const seconds = document.querySelector('[data-seconds]');
 
 function convertMs(ms) {
   const second = 1000;
@@ -40,10 +19,42 @@ function convertMs(ms) {
   const hours = Math.floor((ms % day) / hour);
   const minutes = Math.floor(((ms % day) % hour) / minute);
   const seconds = Math.floor((((ms % day) % hour) % minute) / second);
-
   return { days, hours, minutes, seconds };
 }
 
 function addLeadingZero(value) {
   return String(value).padStart(2, '0');
 }
+
+const options = {
+  enableTime: true,
+  time_24hr: true,
+  defaultDate: new Date(),
+  minuteIncrement: 1,
+  onClose(selectedDates) {
+    selectedTime = selectedDates[0];
+    if (selectedDates[0] <= new Date()) {
+      startBtn.disabled = true;
+      Notiflix.Notify.failure('Please choose a date in the future');
+    } else {
+      startBtn.disabled = false;
+    }
+  },
+};
+
+function onStartTimer() {
+  setInterval(() => {
+    let diff = new Date(input.value) - new Date();
+    startBtn.disabled = true;
+    if (diff > 0) {
+      let time = convertMs(diff);
+      days.textContent = addLeadingZero(time.days);
+      hours.textContent = addLeadingZero(time.hours);
+      minutes.textContent = addLeadingZero(time.minutes);
+      seconds.textContent = addLeadingZero(time.seconds);
+    }
+  }, 1000);
+}
+
+flatpickr(input, options);
+startBtn.addEventListener('click', onStartTimer);
