@@ -45,3 +45,8 @@ button {
   font-size: xx-large;
   font-weight: 700;
 }
+
+form {
+  display: flex;
+  flex-wrap: wrap;
+}
