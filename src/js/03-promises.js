@@ -13,7 +13,8 @@ function onFormSubmit(event) {
   step = Number(event.currentTarget.step.value);
   amount = Number(event.currentTarget.amount.value);
   if (delay >= 0 && step >= 0 && amount > 0) {
-    for (let position = 0; position <= amount; position += 1) {
+    for (let position = 1; position <= amount; position += 1) {
+      delay += step;
       createPromise(position, delay)
         .then(({ position, delay }) => {
           Notiflix.Notify.success(
